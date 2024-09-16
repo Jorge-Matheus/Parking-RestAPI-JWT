@@ -2,6 +2,8 @@ package com.project.demo_parking_api.service;
 
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,11 +28,19 @@ public class UsuarioService {
 		return usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found!"));
 	}
 
-	public Usuario editarSenha(Long id, String password) {
-		Usuario user = buscarPorId(id);
-		user.setPassword(password);
-		return user;
+	@Transactional
+	public Usuario editarSenha(Long id, String senhaAtual, String novaSenha, String confirmaSenha) {
+		if(!novaSenha.equals(confirmaSenha)) {
+			throw new RuntimeException("Nova senha não confere com confirmação de senha.");
+		}
 		
+		Usuario user = buscarPorId(id);
+		if(!user.getPassword().equals(senhaAtual)) {
+			throw new RuntimeException("Sua senha não confere");
+		}
+		
+		user.setPassword(novaSenha);
+		return user;
 	}
 
 	@Transactional(readOnly = true)

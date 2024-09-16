@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.demo_parking_api.entity.Usuario;
 import com.project.demo_parking_api.service.UsuarioService;
+import com.project.demo_parking_api.web.dto.UsuarioCreateDto;
+import com.project.demo_parking_api.web.dto.mapper.UsuarioMapper;
+import com.project.demo_parking_api.web.dto.mapper.UsuarioResponseDto;
 
 @RestController
 @RequestMapping("api/v1/usuarios")
@@ -24,9 +27,9 @@ public class UsuarioController {
 	private UsuarioService usuarioService;
 	
 	@PostMapping
-	public ResponseEntity<Usuario> create(@RequestBody Usuario usuario) {
-		Usuario user = usuarioService.salvar(usuario);
-		return ResponseEntity.status(HttpStatus.CREATED).body(user);
+	public ResponseEntity<UsuarioResponseDto> create(@RequestBody UsuarioCreateDto createDto) {
+		Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDto));
+		return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDto(user));
 	}
 	
 	@GetMapping("/{id}")

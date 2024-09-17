@@ -20,6 +20,8 @@ import com.project.demo_parking_api.web.dto.UsuarioSenhaDto;
 import com.project.demo_parking_api.web.dto.mapper.UsuarioMapper;
 import com.project.demo_parking_api.web.dto.mapper.UsuarioResponseDto;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("api/v1/usuarios")
 public class UsuarioController {
@@ -28,7 +30,7 @@ public class UsuarioController {
 	private UsuarioService usuarioService;
 	
 	@PostMapping
-	public ResponseEntity<UsuarioResponseDto> create(@RequestBody UsuarioCreateDto createDto) {
+	public ResponseEntity<UsuarioResponseDto> create(@Valid @RequestBody UsuarioCreateDto createDto) {
 		Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDto));
 		return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDto(user));
 	}
@@ -41,7 +43,7 @@ public class UsuarioController {
 	
 	
 	@PatchMapping("/{id}")
-	public ResponseEntity<Void> updatePassword(@PathVariable Long id, @RequestBody UsuarioSenhaDto dto) {
+	public ResponseEntity<Void> updatePassword(@Valid @PathVariable Long id, @RequestBody UsuarioSenhaDto dto) {
 		Usuario user = usuarioService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
 		return ResponseEntity.noContent().build();
 	}

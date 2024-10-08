@@ -4,24 +4,28 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class UsuarioCreateDto {
+public class UsuarioCreateDto  {
 	
+
 	@NotBlank
-	@Email(message = "formado do e-mail está invalido", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")
+	@Email(message = "formato do e-mail está invalido", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")	
 	private String username;
 	
 	@NotBlank
-	@Size(min = 6, max = 6)
+	@Size(min = 6, max = 13)
 	private String password;
-	
-	
-	public UsuarioCreateDto() {}
 	
 	public UsuarioCreateDto(String username, String password) {
 		super();
 		this.username = username;
 		this.password = password;
 	}
+	
+
+	public UsuarioCreateDto() {
+		super();
+	}
+
 
 	public String getUsername() {
 		return username;
@@ -38,11 +42,4 @@ public class UsuarioCreateDto {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	@Override
-	public String toString() {
-		return "UsuarioCreateDto [username=" + username + ", password=" + password + "]";
-	}
-	
-	
 }

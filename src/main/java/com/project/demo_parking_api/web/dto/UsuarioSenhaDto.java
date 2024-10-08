@@ -4,29 +4,33 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class UsuarioSenhaDto {
-
+	
 	@NotBlank
-	@Size(min = 6, max = 6)
+	@Size(min = 6, max = 13)
 	private String senhaAtual;
-	
 	@NotBlank
-	@Size(min = 6, max = 6)
+	@Size(min = 6, max = 13)
 	private String novaSenha;
-	
 	@NotBlank
-	@Size(min = 6, max = 6)
+	@Size(min = 6, max = 13)
 	private String confirmaSenha;
 	
 	
-	public UsuarioSenhaDto() {}
-
-
 	public UsuarioSenhaDto(String senhaAtual, String novaSenha, String confirmaSenha) {
 		super();
 		this.senhaAtual = senhaAtual;
 		this.novaSenha = novaSenha;
 		this.confirmaSenha = confirmaSenha;
 	}
+	
+	
+
+
+	public UsuarioSenhaDto() {
+		super();
+	}
+
+
 
 
 	public String getSenhaAtual() {
@@ -56,12 +60,5 @@ public class UsuarioSenhaDto {
 
 	public void setConfirmaSenha(String confirmaSenha) {
 		this.confirmaSenha = confirmaSenha;
-	}
-
-
-	@Override
-	public String toString() {
-		return "UsuarioSenhaDto [senhaAtual=" + senhaAtual + ", novaSenha=" + novaSenha + ", confirmaSenha="
-				+ confirmaSenha + "]";
 	}
 }

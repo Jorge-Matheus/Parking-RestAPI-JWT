@@ -16,14 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtUtils {
 
-	
 	public static final String JWT_BEARER = "Bearer ";
 	public static final String JWT_AUTHORIZATION = "Authorization";
-	public static final String SECRET_KEY = "0123456789-0123456789-0123456789";
-
+	public static final String SECRET_KEY = "0123456789-0987654321-0123456789";
 	public static final long EXPIRE_DAYS = 0;
 	public static final long EXPIRE_HOURS = 0;
-	public static final long EXPIRES_MINUTES = 2;
+	public static final long EXPIRE_MINUTES = 120;
 	
 	private JwtUtils() {}
 	
@@ -34,7 +32,7 @@ public class JwtUtils {
 	
 	private static Date toExpireDate(Date start) {
 		LocalDateTime dateTime = start.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-		LocalDateTime end = dateTime.plusDays(EXPIRE_DAYS).plusHours(EXPIRE_HOURS).plusMinutes(EXPIRES_MINUTES);
+		LocalDateTime end = dateTime.plusDays(EXPIRE_DAYS).plusHours(EXPIRE_HOURS).plusMinutes(EXPIRE_MINUTES);
 		return Date.from(end.atZone(ZoneId.systemDefault()).toInstant());
 	}
 	

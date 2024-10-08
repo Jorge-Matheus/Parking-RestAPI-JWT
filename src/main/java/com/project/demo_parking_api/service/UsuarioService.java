@@ -3,6 +3,7 @@ package com.project.demo_parking_api.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +20,14 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Transactional
 	public Usuario salvar(Usuario usuario)  {
 		try {
+			usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 			return usuarioRepository.save(usuario);
 		}
 		catch(org.springframework.dao.DataIntegrityViolationException ex) {
@@ -37,23 +42,17 @@ public class UsuarioService {
 
 	@Transactional
 	public Usuario editarSenha(Long id, String senhaAtual, String novaSenha, String confirmaSenha) {
+		Usuario usuario = usuarioRepository.findById(id).get();
 		
-		try {
-			if(!novaSenha.equals(confirmaSenha)) {
-				throw new PasswordInvalidException("Nova senha não confere com confirmação de senha.");
-			}
-			
-			Usuario user = buscarPorId(id);
-			if(!user.getPassword().equals(senhaAtual)) {
-				throw new PasswordInvalidException("Sua senha não confere");
-			}
-			
-			user.setPassword(novaSenha);
-			return user;
+		if(!passwordEncoder.matches(senhaAtual, usuario.getPassword())) {
+			throw new PasswordInvalidException("Senha atual invalida, verifique e tente novamente");
 		}
-		catch(PasswordInvalidException ex) {
-			throw new PasswordInvalidException("Password invalid");
+		if(!novaSenha.equals(confirmaSenha)) {
+			throw new PasswordInvalidException("Senha de confirmaçao nao confere com a nova senha");
 		}
+		usuario.setPassword(passwordEncoder.encode(novaSenha));
+		
+		return usuarioRepository.save(usuario);
 	}
 
 	@Transactional(readOnly = true)
@@ -71,8 +70,5 @@ public class UsuarioService {
 	@Transactional(readOnly = true)
 	public Usuario.Role buscarRolePorUsername(String username) {
 		return usuarioRepository.findRoleByUsername(username);
-	}
-	
-	
-	
+	}	
 }

@@ -25,6 +25,18 @@ import com.project.demo_parking_api.jwt.JwtAuthorizationFilter;
 @Configuration
 public class SpringSecurityConfig {
 
+	private static final String[] DOCUMENTATION_OPENAPI = {
+			"/docs/index.html",
+			"docspark.html", "docs-park/**",
+			"v3/api-docs/**",
+			"/swagger-ui-custom.html",
+			"/swagger-ui.html",
+			"swagger-ui/**",
+			"/**.html",
+			"/webjars/**",
+			"/configuration/**",
+			"/swagger-resources/**"	
+	};
 	
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,6 +46,7 @@ public class SpringSecurityConfig {
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers(antMatcher(HttpMethod.POST, "/api/v1/usuarios")).permitAll()
 						.requestMatchers(antMatcher(HttpMethod.POST, "/api/v1/auth")).permitAll()
+						.requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
 						.anyRequest().authenticated()
 						)
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

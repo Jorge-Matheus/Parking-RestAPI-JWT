@@ -376,6 +376,7 @@ public class UsuarioIT {
 		public void buscarTodosOsUsuario_RetornarStatus200() {
 			List<UsuarioResponseDto> responseBody = testClient
 		        .get().uri("/api/v1/usuarios")
+		        .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com", "123456"))
 		        .exchange()
 		        .expectStatus().isOk()
 		        .expectBodyList(UsuarioResponseDto.class)
@@ -384,6 +385,4 @@ public class UsuarioIT {
 		    org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
 		    org.assertj.core.api.Assertions.assertThat(responseBody).isEqualTo(3);
 		}
-		
-		
 }

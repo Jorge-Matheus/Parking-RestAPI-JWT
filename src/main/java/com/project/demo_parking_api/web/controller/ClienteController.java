@@ -1,8 +1,8 @@
 package com.project.demo_parking_api.web.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.demo_parking_api.entity.Cliente;
 import com.project.demo_parking_api.jwt.JwtUserDetails;
+import com.project.demo_parking_api.repositories.projection.ClienteProjection;
 import com.project.demo_parking_api.service.ClienteService;
 import com.project.demo_parking_api.service.UsuarioService;
+import com.project.demo_parking_api.web.controller.dto.PageableDto;
 import com.project.demo_parking_api.web.dto.ClienteCreateDto;
 import com.project.demo_parking_api.web.dto.ClienteMapper;
 import com.project.demo_parking_api.web.dto.ClienteResponseDto;
+import com.project.demo_parking_api.web.dto.mapper.PageableMapper;
 import com.project.demo_parking_api.web.exception.ErrorMessage;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -71,12 +74,10 @@ public class ClienteController {
 		return ResponseEntity.ok(ClienteMapper.toDto(cliente));
 	}
 	
-	
-	
 	@GetMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<List<Cliente>> getAll() {
-		List<Cliente> clientes = clienteService.buscarTodos();
-		return ResponseEntity.ok(clientes);
+	public ResponseEntity<PageableDto> getAll(Pageable pageable) {
+		Page<ClienteProjection> clientes = clienteService.buscarTodos(pageable);
+		return ResponseEntity.ok(PageableMapper.toDto(clientes));
 	}
 }

@@ -9,6 +9,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import com.project.demo_parking_api.web.controller.dto.PageableDto;
 import com.project.demo_parking_api.web.dto.ClienteCreateDto;
 import com.project.demo_parking_api.web.dto.ClienteResponseDto;
 import com.project.demo_parking_api.web.exception.ErrorMessage;
@@ -163,5 +164,53 @@ public class ClienteIT {
 		
 		org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
 	    org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(403);
+	}
+	
+	
+	@Test
+	public void buscarCliente_ComPaginacaoPeloAdmin_RetornarClientesComStatus200() {
+		PageableDto responseBody = testClient.get()
+		.uri("/api/v1/clientes")
+		.headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com", "123456"))
+		.exchange()
+		.expectStatus().isOk()
+		.expectBody(PageableDto.class)
+		.returnResult().getResponseBody();
+		
+		org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+	    org.assertj.core.api.Assertions.assertThat(responseBody.getContent()).size().isEqualTo(2);
+	    org.assertj.core.api.Assertions.assertThat(responseBody.getNumber()).isEqualTo(0);
+	    org.assertj.core.api.Assertions.assertThat(responseBody.getTotalPages()).isEqualTo(1);
+	    
+	    
+	    responseBody = testClient.get()
+	    		.uri("/api/v1/clientes?size=1&page=1")
+	    		.headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com", "123456"))
+	    		.exchange()
+	    		.expectStatus().isOk()
+	    		.expectBody(PageableDto.class)
+	    		.returnResult().getResponseBody();
+	    		
+	    		org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+	    	    org.assertj.core.api.Assertions.assertThat(responseBody.getContent()).size().isEqualTo(1);
+	    	    org.assertj.core.api.Assertions.assertThat(responseBody.getNumber()).isEqualTo(1);
+	    	    org.assertj.core.api.Assertions.assertThat(responseBody.getTotalPages()).isEqualTo(2);
+
+	}
+	
+	
+	@Test
+	public void buscarCliente_ComPaginacaoPeloCliente_RetornarErrorMessageComStatus403() {
+		ErrorMessage responseBody = testClient.get()
+		.uri("/api/v1/clientes")
+		.headers(JwtAuthentication.getHeaderAuthorization(testClient, "bia@email.com", "123456"))
+		.exchange()
+		.expectStatus().isForbidden()
+		.expectBody(ErrorMessage.class)
+		.returnResult().getResponseBody();
+		
+		org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+	    org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(403);
+	    
 	}
 }

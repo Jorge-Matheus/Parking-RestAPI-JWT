@@ -1,5 +1,7 @@
 package com.project.demo_parking_api.repositories;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +19,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
 	
 	Cliente findByUsuarioId(Long id);
+	
+	Optional<Cliente> findByCpf(String cpf);
 }

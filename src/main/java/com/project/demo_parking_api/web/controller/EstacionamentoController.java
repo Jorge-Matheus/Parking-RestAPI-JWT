@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.project.demo_parking_api.entity.ClienteVaga;
+import com.project.demo_parking_api.service.ClienteVagaService;
 import com.project.demo_parking_api.service.EstacionamentoService;
 import com.project.demo_parking_api.web.dto.ClienteResponseDto;
 import com.project.demo_parking_api.web.dto.EstacionamentoCreateDto;
@@ -37,7 +40,9 @@ public class EstacionamentoController {
 
 	@Autowired
 	private EstacionamentoService estacionamentoService;
-	
+
+	@Autowired
+	private ClienteVagaService clienteVagaService;
 	
 	@Operation(summary = "Operação de check-in", description = "Recurso para dar entrada de um veiculo no estaciomaneto "
 			+ "Requisição exige uso de um bearer token. Acesso restrito a Role='CLIENTE'", security = @SecurityRequirement(name = "security"), responses = {
@@ -59,4 +64,14 @@ public class EstacionamentoController {
 				.toUri();
 		return ResponseEntity.created(location).body(responseDto);
 	}
+	
+	
+	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
+	@GetMapping("/check-in/{recibo}")
+	public ResponseEntity<EstacionamentoResponseDto> geyByRecibo(@PathVariable String recibo) {
+		ClienteVaga clienteVaga = clienteVagaService.buscarPorRecibo(recibo);
+		EstacionamentoResponseDto dto = ClienteVagaMapper.toDto(clienteVaga);
+		return ResponseEntity.ok(dto);
+	}
+	
 }

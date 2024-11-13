@@ -4,8 +4,8 @@ insert into USUARIOS (id, username, password, role) values (101, 'bia@email.com'
 
 insert into USUARIOS (id, username, password, role) values (102, 'bob@email.com', '$2a$12$aDxVS1vfLc4k9I0fVrjYhuCtEvUrXbacnWio9KovPv4bCikDC7V8G', 'ROLE_CLIENTE');
 
-insert into CLIENTES (id, nome, cpf, id_usuario) values (10, 'Bianca Silva', '65434217039', 101);
-insert into CLIENTES (id, nome, cpf, id_usuario) values (20, 'Roberto Gomes', '99839149059', 102);
+insert into CLIENTES (id, nome, cpf, id_usuario) values (21, 'Biatriz Rodrigues', '65434217039', 101);
+insert into CLIENTES (id, nome, cpf, id_usuario) values (22, 'Rodrigo Silva', '99839149059', 102);
 
 insert into VAGAS (id, codigo, status) values (100, 'A-03', 'OCUPADA');
 insert into VAGAS (id, codigo, status) values (200, 'A-04', 'OCUPADA');

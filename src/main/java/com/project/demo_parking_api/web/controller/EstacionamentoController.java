@@ -9,9 +9,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.service.annotation.PutExchange;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.project.demo_parking_api.entity.ClienteVaga;
@@ -73,5 +75,16 @@ public class EstacionamentoController {
 		EstacionamentoResponseDto dto = ClienteVagaMapper.toDto(clienteVaga);
 		return ResponseEntity.ok(dto);
 	}
+	
+	
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@PutMapping("/check-out/{recibo}")
+	public ResponseEntity<EstacionamentoResponseDto> checkOut(@PathVariable String recibo) {
+		ClienteVaga clienteVaga = estacionamentoService.checkOut(recibo);
+		EstacionamentoResponseDto dto = ClienteVagaMapper.toDto(clienteVaga);
+		return ResponseEntity.ok(dto);
+	}
+	
 	
 }

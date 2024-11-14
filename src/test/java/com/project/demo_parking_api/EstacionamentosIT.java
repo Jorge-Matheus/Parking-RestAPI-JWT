@@ -172,6 +172,6 @@ public class EstacionamentosIT {
 		.expectBody()
 		.jsonPath("status").isEqualTo("404")
 		.jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in/23456313-901300")
-		.jsonPath("method").isEqualTo("GET");
+		.jsonPath("method").isEqualTo("GET	");
 	}
 }

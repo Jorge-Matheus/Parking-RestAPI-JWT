@@ -174,4 +174,17 @@ public class EstacionamentosIT {
 		.jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in/23456313-901300")
 		.jsonPath("method").isEqualTo("GET	");
 	}
+	
+	
+	@Test
+	public void criarCheckOut_ComReciboExistente_RetornarSucesso() {
+		testClient.put(),"/api/v1/estacionamentos/check-in/{recibo}", "23456313-901300")
+		.headers(JwtAuthentication.getHeaderAuthorization(testClient, "bob@email.com", "123456"))
+		.exchange()
+		.expectStatus().isNotFound()
+		.expectBody()
+		.jsonPath("status").isEqualTo("404")
+		.jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in/23456313-901300")
+		.jsonPath("method").isEqualTo("GET	");
+	}
 }
